@@ -1,28 +1,18 @@
-const { Router } = require('express')
-const expess = require('express')
+const express = require('express')
+const PORT = process.env.PORT || 3001
 const app = express()
+const path = require('path')
+const apiRoutes = require('./routes/apiRoutes');
+const htmlRoutes = require('./routes/htmlRoutes');
 
-app.set('view engine', 'ejs')
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.static('public'));
+app.use('/api', apiRoutes);
+app.use('/', htmlRoutes)
 
-app.get('/', (req, res) => {
-    console.log('Here')
-    res.sendStatus(500)
-    res.render('index.html')
+
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`)
 })
-
-app.get('/notes', (req, res) =>  {
-    res.send('Notes List')
-})
-
-app.get('/notes/new', (req, res) => {
-    res.send("Notes New Form")
-})
-
-const userRouter = require ('./routes/notes')
-const postRouter = require("./routes/posts")
-
-app.use('/notes', useRouter)
-app.use("/posts, postRouter")
-
-app.listen(3000)
 
